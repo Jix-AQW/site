@@ -1,39 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://github.com/Jix-AQW/site/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/sobre/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/sobre.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/blog/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/blog/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/guias/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/classes/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/guias/class/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/classes/timekeeper/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/guias/class/timekeeper.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/encantamentos/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/guias/consumivel/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/encantamentos/Pneuma/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/guias/consumivel/elixir/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/po%C3%A7%C3%B5es/</loc>
-         <lastmod>2025-04-05</lastmod>
+         <loc>https://github.com/Jix-AQW/site/guias/consumivel/food/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/consumivel/potion/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/consumivel/scroll/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/consumivel/tonic/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/dungeon/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/enhancement/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/enhancement/awe/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/enhancement/forge/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/enhancement/forge/pneuma.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/enhancement/normal/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/geral/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/item/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/reputacao/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/ultra/index.html</loc>
+         <lastmod>2025-04-06</lastmod>
     </url>
 </urlset>
