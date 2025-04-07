@@ -37,35 +37,39 @@
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/classes/timekeeper.html</loc>
-         <lastmod>2025-04-07</lastmod>
-    </url>
-    <url>
          <loc>https://github.com/Jix-AQW/site/guias/consumiveis/index.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/elixir/index.html</loc>
+         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/elixirs/index.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/food/index.html</loc>
+         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/foods/index.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/potion/index.html</loc>
+         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/potions/index.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/scroll/index.html</loc>
+         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/scrolls/index.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/tonic/index.html</loc>
+         <loc>https://github.com/Jix-AQW/site/guias/consumiveis/tonics/index.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
          <loc>https://github.com/Jix-AQW/site/guias/dungeons/index.html</loc>
+         <lastmod>2025-04-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/dungeons/grimskull.html</loc>
+         <lastmod>2025-04-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/dungeons/templeshrine.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
@@ -81,10 +85,6 @@
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
-         <loc>https://github.com/Jix-AQW/site/guias/enhancements/forge/pneuma.html</loc>
-         <lastmod>2025-04-07</lastmod>
-    </url>
-    <url>
          <loc>https://github.com/Jix-AQW/site/guias/enhancements/normal/index.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
@@ -94,6 +94,10 @@
     </url>
     <url>
          <loc>https://github.com/Jix-AQW/site/guias/itens/index.html</loc>
+         <lastmod>2025-04-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/Jix-AQW/site/guias/itens/blade-of-awe.html</loc>
          <lastmod>2025-04-07</lastmod>
     </url>
     <url>
