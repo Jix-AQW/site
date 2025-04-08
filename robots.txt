@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jix-aqw.github.io/site/sitemap.xml
