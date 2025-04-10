@@ -2219,7 +2219,7 @@
                     headerToolbar: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'dayGridMonth,listWeek,timeGridDay'
+                        right: 'multiMonthYear,dayGridMonth,listWeek,timeGridDay'
                     },
                     views: {
                         listWeek: {
@@ -2230,6 +2230,9 @@
                         },
                         timeGridDay: {
                             buttonText: 'Dia'
+                        },
+                        multiMonthYear: {
+                            buttonText: 'Ano'
                         }
                     },                    
                     fixedWeekCount: false,
@@ -2238,7 +2241,7 @@
                     eventLimit: true,
                     eventSources: [
                       {
-                        url: 'assets/calendar/aqw.json',
+                        url: '../assets/calendar/aqw.json',
                         failure: () => alert('Falha ao carregar aqw.json')
                       }
                     ]
