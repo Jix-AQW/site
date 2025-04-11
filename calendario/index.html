@@ -29,7 +29,7 @@
     
     
       
-        <title>Calendário - Jix - AQWorlds Handbook</title>
+        <title>Index - Jix - AQWorlds Handbook</title>
       
     
     
@@ -139,7 +139,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Calendário
+              Index
             
           </span>
         </div>
@@ -2202,232 +2202,18 @@
   
 
 
+<p><link rel="stylesheet" href="../assets/css/calendar.css"></p>
+<script src="../assets/js/calendar.js"></script>
+
 <h1 id="calendario">Calendário<a class="headerlink" href="#calendario" title="Permanent link">&para;</a></h1>
 <hr />
 <div class="admonition tip">
 <p class="admonition-title">Dica</p>
 <p>Veja os links à esquerda da página ou clique em <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 96c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m0 160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32m448 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h384c17.7 0 32 14.3 32 32"/></svg></span> (canto superior esquerdo).</p>
 </div>
-<p><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></p>
 <div id="calendar">
   <div class="md-calendar-error" hidden></div>
 </div>
-
-<style>
-  /* Adicione estas regras para o tooltip */
-.event-tooltip {
-  position: absolute;
-  background: var(--md-default-bg-color);
-  color: var(--md-default-fg-color);
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 4px;
-  padding: 1rem;
-  z-index: 1000;
-  box-shadow: var(--md-shadow-z2);
-  max-width: 300px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.event-tooltip.active {
-  opacity: 1;
-}
-
-.event-tooltip h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.6em;
-  color: var(--md-primary-fg-color);
-}
-
-.event-tooltip p {
-  margin: 0.3rem 0;
-  font-size: 1.3em;
-}
-
-.event-tooltip time {
-  display: block;
-  color: var(--md-default-fg-color--light);
-  font-size: 1.1em;
-}
-/* Estilos integrados ao Material Theme */
-.fc-event {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.fc-event:hover {
-  transform: translateY(-1px);
-  z-index: 100;
-}
-.fc {
-  --fc-border-color: var(--md-default-fg-color--lightest);
-  --fc-page-bg-color: var(--md-default-bg-color);
-  --fc-today-bg-color: var(--md-default-fg-color--lightest);
-  font-family: var(--md-text-font-family);
-}
-
-.fc-toolbar-title {
-  color: var(--md-default-fg-color--light);
-  font-weight: 500;
-  font-size: 1.25em;
-}
-
-.fc-button {
-  background-color: var(--md-primary-fg-color) !important;
-  border-color: var(--md-primary-fg-color) !important;
-  color: var(--md-primary-bg-color) !important;
-  border-radius: 2px;
-  text-transform: none;
-  box-shadow: var(--md-shadow-z1);
-  transition: opacity 0.3s;
-}
-
-.fc-button:hover {
-  opacity: 0.8;
-}
-
-.fc-event {
-
-  border-color: transparent;
-
-  border-radius: 2px;
-  font-size: 0.8em;
-  padding: 2px 6px;
-  margin: 2px 0;
-}
-
-.md-calendar-loading {
-  display: flex;
-  justify-content: center;
-  padding: 2rem;
-}
-
-.md-spinner {
-  width: 2rem;
-  height: 2rem;
-  border: 0.25em solid var(--md-default-fg-color--lightest);
-  border-top-color: var(--md-primary-fg-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.md-calendar-error {
-  color: var(--md-typeset-a-color);
-  padding: 1rem;
-  border-radius: 0.2rem;
-  background-color: var(--md-error-bg-color);
-}
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const tooltip = document.createElement('div');
-    tooltip.className = 'event-tooltip';
-    document.body.appendChild(tooltip);
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      locale: 'pt',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'multiMonthYear,dayGridMonth,listWeek,timeGridDay'
-      },
-      views: {
-        listWeek: {
-          buttonText: 'Lista'
-        },
-        dayGridMonth: {
-          buttonText: 'Mês'
-        },
-        timeGridDay: {
-          buttonText: 'Dia'
-        },
-        multiMonthYear: {
-          buttonText: 'Ano'
-        }
-      },
-      fixedWeekCount: false,
-      contentHeight: 'auto',
-      editable: false,
-      eventLimit: true,
-
-      eventSources: [
-        {
-          url: '../assets/calendar/aqw.json', 
-          failure: () => alert('Falha ao carregar aqw.json')
-        }
-      ],
-
-      eventDidMount: function(info) {
-
-        const title = info.event.title.toLowerCase();
-        const icon = document.createElement('span');
-        icon.style.marginRight = '6px';
-
-        if (title.includes('double rep')) {
-          icon.innerHTML = '';
-        } else if (title.includes('double exp')) {
-          icon.innerHTML = '';
-        } else if (title.includes('double gold')) {
-          icon.innerHTML = '';
-        } else if (title.includes('double class point')) {
-          icon.innerHTML = '';
-        }
-
-        if (icon.innerHTML !== '') {
-          info.el.querySelector('.fc-event-title')?.prepend(icon);
-        }      
-
-      // Tooltip hover
-      const element = info.el;
-
-      element.addEventListener('mouseenter', (e) => {
-        const event = info.event;
-        const start = event.start?.toLocaleDateString('pt-BR', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
-        const end = event.end?.toLocaleDateString('pt-BR', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
-        tooltip.innerHTML = `
-          <h3>${event.title}</h3>
-          ${event.extendedProps.description ? `<p>${event.extendedProps.description}</p>` : ''}
-          <time>🏁 Início: ${start}</time>
-          ${end ? `<time>🏳️ Término: ${end}</time>` : ''}
-        `;
-
-        // Posicionamento do tooltip
-        const rect = element.getBoundingClientRect();
-        tooltip.style.left = `${rect.left + window.scrollX}px`;
-        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 10}px`;
-        tooltip.classList.add('active');
-      });
-
-      element.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('active');
-      });
-    }
-  });
-
-    calendar.render();
-  });
-</script>
 
 
 
