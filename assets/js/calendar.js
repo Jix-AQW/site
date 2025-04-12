@@ -1,57 +1,57 @@
-  document.addEventListener('DOMContentLoaded', function () {
-    const tooltip = document.createElement('div');
-    tooltip.className = 'event-tooltip';
-    document.body.appendChild(tooltip);
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      locale: 'pt',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,listWeek'
+document.addEventListener('DOMContentLoaded', function () {
+  const tooltip = document.createElement('div');
+  tooltip.className = 'event-tooltip';
+  document.body.appendChild(tooltip);
+  var calendarEl = document.getElementById('calendar');
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'pt',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,listWeek'
+    },
+    views: {
+      listWeek: {
+        buttonText: 'Lista'
       },
-      views: {
-        listWeek: {
-          buttonText: 'Lista'
-        },
-        dayGridMonth: {
-          buttonText: 'Mês'
-        }
-      },
-      fixedWeekCount: true,
-      contentHeight: 'auto',
-      editable: false,
-      eventLimit: true,
+      dayGridMonth: {
+        buttonText: 'Mês'
+      }
+    },
+    fixedWeekCount: true,
+    contentHeight: 'auto',
+    editable: false,
+    eventLimit: true,
+    
+    height: 'auto',
+    eventSources: [
+      {
+        url: '../assets/calendar/aqw.json', 
+        failure: () => alert('Falha ao carregar aqw.json')
+      }
+    ],
+
+    eventDidMount: function(info) {
       
-      height: 'auto',
-      eventSources: [
-        {
-          url: '../assets/calendar/aqw.json', 
-          failure: () => alert('Falha ao carregar aqw.json')
-        }
-      ],
+      const title = info.event.title.toLowerCase();
+      const icon = document.createElement('span');
+      icon.style.marginRight = '6px';
 
-      eventDidMount: function(info) {
-        
-        const title = info.event.title.toLowerCase();
-        const icon = document.createElement('span');
-        icon.style.marginRight = '6px';
+      if (title.includes('double rep')) {
+        icon.innerHTML = '';
+      } else if (title.includes('double exp')) {
+        icon.innerHTML = '';
+      } else if (title.includes('double gold')) {
+        icon.innerHTML = '';
+      } else if (title.includes('double class point')) {
+        icon.innerHTML = '';
+      }
 
-        if (title.includes('double rep')) {
-          icon.innerHTML = '';
-        } else if (title.includes('double exp')) {
-          icon.innerHTML = '';
-        } else if (title.includes('double gold')) {
-          icon.innerHTML = '';
-        } else if (title.includes('double class point')) {
-          icon.innerHTML = '';
-        }
-
-        if (icon.innerHTML !== '') {
-          info.el.querySelector('.fc-event-title')?.prepend(icon);
-        }      
-      
+      if (icon.innerHTML !== '') {
+        info.el.querySelector('.fc-event-title')?.prepend(icon);
+      }      
+    
       // Tooltip hover
       const element = info.el;
       element.addEventListener('mouseenter', (e) => {
@@ -75,8 +75,8 @@
         tooltip.innerHTML = `
           <h3>${event.title}</h3>
           ${event.extendedProps.description ? `<p>${event.extendedProps.description}</p>` : ''}
-          <time>🏁 Início: ${start}</time>
-          ${end ? `<time>🏳️ Término: ${end}</time>` : ''}
+          <time>Início: ${start}</time>
+          ${end ? `<time>Término: ${end}</time>` : ''}
         `;
       
         const rect = element.getBoundingClientRect();
@@ -99,14 +99,15 @@
       
         tooltip.style.left = `${left}px`;
         tooltip.style.top = `${top}px`;
-      
-        // 💡 Aqui estava o que faltava:
         tooltip.classList.add('active');
       });
-      
-      
+
+      // Adiciona o event listener para mouseleave
+      element.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('active');
+      });
     }
   });
 
-    calendar.render();
-  });
+  calendar.render();
+});
