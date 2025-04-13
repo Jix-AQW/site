@@ -10,12 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function showNotificationWithSound(message) {
             const audio = new Audio('/site/assets/js/notif.mp3');
+            audio.volume = 0.5;
             audio.play().catch(e => console.log('Não foi possível reproduzir o som:', e));
         
             crate.notify({
                 content: message,
                 avatar: AVATAR_URL,
-                timeout: 5000 // opcional, define duração da notificação (em ms)
+                timeout: 5000 
             });
         }
 
@@ -29,14 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 probability: 1.0
             },
             pageSpecific: {
-                "/site/sobre.html": {
-                    messages: ["👋 Conheça nossa história!", "📖 Saiba mais sobre quem somos!"],
-                    probability: 0.3
-                },
-                "/site/ajuda.html": {
-                    messages: ["❓ Precisa de ajuda? Estamos aqui!", "🛠️ Problemas? Nos avise no chat!"],
-                    probability: 0.3
-                },
                 "/site/index.html": {
                     messages: ["🌟 Bem-vindo à página inicial!", "🚀 Explore nosso conteúdo em Guias!"],
                     probability: 0.3
@@ -47,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         "Ainda tá com problemas com ultras?",
                         "Quer saber como derrotar os ultras?"
                     ],
-                    probability: 0.3
+                    probability: 0.2
                 }
             },
             generic: {
