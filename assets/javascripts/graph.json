@@ -203,6 +203,12 @@
       "name": "Discord Bot",
       "symbolSize": 0,
       "value": "/site/ultrahub/bot/index.html"
+    },
+    {
+      "id": "34",
+      "name": "Ins\u00edgnias",
+      "symbolSize": 0,
+      "value": "/site/ultrahub/insignias/index.html"
     }
   ],
   "links": []
