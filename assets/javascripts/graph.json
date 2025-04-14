@@ -197,6 +197,12 @@
       "name": "UltraHub",
       "symbolSize": 0,
       "value": "/site/ultrahub/index.html"
+    },
+    {
+      "id": "33",
+      "name": "Discord Bot",
+      "symbolSize": 0,
+      "value": "/site/ultrahub/bot/index.html"
     }
   ],
   "links": []
