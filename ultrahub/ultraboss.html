@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR" x-data="app()" :class="{'dark': darkMode}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UltraHub Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            800: '#1a202c',
+                            700: '#2d3748',
+                            600: '#4a5568',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-800 min-h-screen transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200">UltraHub Editor</h1>
+                <p class="text-gray-600 dark:text-gray-400">Edite os dados dos bosses ultra de AQW</p>
+            </div>
+            <button @click="darkMode = !darkMode" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+                <svg x-show="!darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <svg x-show="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Sidebar -->
+            <div class="lg:col-span-1 bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Carregar JSON</label>
+                        <input type="file" @change="loadFile" class="block w-full text-sm text-gray-500 dark:text-gray-400
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-md file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900 dark:file:text-blue-100
+                            hover:file:bg-blue-100 dark:hover:file:bg-blue-800">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Carregar Classes (JSON)</label>
+                        <input type="file" @change="loadClassConfig" class="block w-full text-sm text-gray-500 dark:text-gray-400
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-md file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-purple-50 file:text-purple-700 dark:file:bg-purple-900 dark:file:text-purple-100
+                            hover:file:bg-purple-100 dark:hover:file:bg-purple-800">
+                    </div>
+                            <button @click="saveFile" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition">
+                        Salvar JSON
+                    </button>
+                    
+                    <button @click="addNewBoss" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition">
+                        Adicionar Novo Boss
+                    </button>
+                    
+                    <div class="border-t dark:border-gray-600 pt-4">
+                        <h3 class="font-medium text-gray-900 dark:text-gray-200 mb-2">Lista de Bosses</h3>
+                        <ul class="space-y-2 max-h-96 overflow-y-auto">
+                            <template x-for="(boss, bossName) in bosses" :key="bossName">
+                                <li>
+                                    <button @click="selectBoss(bossName)" 
+                                        class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600 transition flex justify-between items-center"
+                                        :class="{'bg-blue-100 dark:bg-blue-900': selectedBoss === bossName}">
+                                        <span x-text="bossName" class="dark:text-gray-200"></span>
+                                        <span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded" x-text="boss.difficulty"></span>
+                                    </button>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Boss Editor -->
+                <div x-show="selectedBoss" class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200" x-text="selectedBoss"></h2>
+                        <button @click="deleteBoss(selectedBoss)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mapa</label>
+                            <input type="text" x-model="bosses[selectedBoss].map" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tamanho do Grupo</label>
+                            <input type="number" x-model="bosses[selectedBoss].party_size" min="1" max="8" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dificuldade</label>
+                            <select x-model="bosses[selectedBoss].difficulty" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                                <option>Easy</option>
+                                <option>Medium</option>
+                                <option>Hard</option>
+                                <option>Extreme</option>
+                                <option>Insane</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rank Requerido</label>
+                            <input type="text" x-model="bosses[selectedBoss].required_rank" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dicas</label>
+                            <textarea x-model="bosses[selectedBoss].tips" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL do Guia</label>
+                            <input type="text" x-model="bosses[selectedBoss].doc_url" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL da Wiki</label>
+                            <input type="text" x-model="bosses[selectedBoss].wiki_url" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Autor</label>
+                            <input type="text" x-model="bosses[selectedBoss].author" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                        </div>
+                    </div>
+
+                    <!-- Compositions -->
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200">Composições</h3>
+                            <button @click="addNewComp(selectedBoss)" class="text-sm bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-md transition">
+                                Adicionar Composição
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <template x-for="(comp, index) in bosses[selectedBoss].comps" :key="index">
+                                <div class="border dark:border-gray-600 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <button @click="toggleCompVisibility(index)" class="flex items-center space-x-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform" :class="{'rotate-90': !hiddenComps.includes(index)}" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                            <h4 class="font-medium dark:text-gray-200" x-text="comp.name"></h4>
+                                        </button>
+                                        <div class="space-x-2">
+                                            <button @click="deleteComp(selectedBoss, index)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-500 text-sm">
+                                                Remover
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div x-show="!hiddenComps.includes(index)" x-transition>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Composição</label>
+                                                <input type="text" x-model="comp.name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                                            </div>
+                                            <div x-data="{ open: false }" class="relative">
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Classes</label>
+                                                <button type="button" @click="open = !open" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-left bg-white dark:bg-gray-800 dark:text-gray-200">
+                                                    <span x-text="comp.classes.length > 0 ? comp.classes.join(', ') : 'Selecione as classes'"></span>
+                                                </button>
+                                                <div x-show="open" @click.outside="open = false" class="absolute z-10 mt-1 w-full rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 shadow-lg max-h-60 overflow-y-auto">
+                                                    <template x-for="(data, className) in availableClasses" :key="className">
+                                                        <label class="flex items-center px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                            <input type="checkbox"
+                                                                :value="className"
+                                                                :checked="comp.classes.includes(className)"
+                                                                @change="(e) => {
+                                                                    const checked = e.target.checked;
+                                                                    const max = bosses[selectedBoss].party_size;
+                                                                    if (checked) {
+                                                                        if (!comp.classes.includes(className) && comp.classes.length < max) {
+                                                                            comp.classes.push(className);
+                                                                            if (availableClasses[className]) {
+                                                                                comp.recommended_setup[className] = {
+                                                                                    items: [],
+                                                                                    enhancements: {
+                                                                                        class: availableClasses[className].enh || '',
+                                                                                        weapon: availableClasses[className].awe_enh || '',
+                                                                                        helm: '',
+                                                                                        cape: ''
+                                                                                    }
+                                                                                };
+                                                                            }
+                                                                        } else {
+                                                                            e.target.checked = false;
+                                                                            alert('Limite de classes atingido');
+                                                                        }
+                                                                    } else {
+                                                                        comp.classes = comp.classes.filter(c => c !== className);
+                                                                        delete comp.recommended_setup[className];
+                                                                    }
+                                                                }"
+                                                                class="mr-2 rounded"
+                                                            >
+                                                            <span x-text="className" class="text-sm text-gray-800 dark:text-gray-200"></span>
+                                                        </label>
+                                                    </template>
+                                                </div>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Selecione até {{ bosses[selectedBoss].party_size }} classes.</p>
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div>
+                                            <h5 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Configurações Recomendadas</h5>
+                                            <div class="space-y-4">
+                                                <template x-for="(setup, className) in comp.recommended_setup" :key="className">
+                                                    <div class="border dark:border-gray-600 rounded p-3">
+                                                        <div class="flex justify-between items-center mb-2">
+                                                            <span class="font-medium dark:text-gray-200" x-text="className"></span>
+                                                            <button @click="deleteSetup(comp, className)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-500 text-xs">
+                                                                Remover
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                                                            <div>
+                                                                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Itens (separados por vírgula)</label>
+                                                                <input type="text" x-model="setup.items.join(', ')" @change="updateItems(setup, $event.target.value)" class="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div>
+                                                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Enhancements</label>
+                                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                                <div>
+                                                                    <label class="block text-xs text-gray-700 dark:text-gray-300 mb-1">Classe</label>
+                                                                    <input type="text" x-model="setup.enhancements.class" class="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="block text-xs text-gray-700 dark:text-gray-300 mb-1">Arma</label>
+                                                                    <input type="text" x-model="setup.enhancements.weapon" class="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="block text-xs text-gray-700 dark:text-gray-300 mb-1">Capacete</label>
+                                                                    <input type="text" x-model="setup.enhancements.helm" class="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                                                                </div>
+                                                                <div>
+                                                                    <label class="block text-xs text-gray-700 dark:text-gray-300 mb-1">Capa</label>
+                                                                    <input type="text" x-model="setup.enhancements.cape" class="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                                
+                                                <button @click="addNewSetup(comp)" class="text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 py-1 px-3 rounded-md transition">
+                                                    Adicionar Configuração de Classe
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div x-show="!selectedBoss" class="bg-white dark:bg-gray-700 p-12 rounded-lg shadow text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="mt-2 text-lg font-medium text-gray-900 dark:text-gray-200">Nenhum boss selecionado</h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Selecione um boss da lista ao lado ou adicione um novo boss para começar a editar.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+function app() {
+    return {
+        bosses: {},
+        selectedBoss: null,
+        darkMode: false,
+        hiddenComps: [],
+        availableClasses: {}, // armazena JSON de classes
+
+        loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    this.bosses = JSON.parse(e.target.result);
+                    this.selectedBoss = Object.keys(this.bosses)[0] || null;
+                    this.hiddenComps = [];
+                } catch (error) {
+                    alert('Erro ao carregar o arquivo: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        },
+
+        // Novo: Carrega o JSON de classes
+        loadClassConfig(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    this.availableClasses = JSON.parse(e.target.result);
+                    alert("Classes carregadas com sucesso!");
+                } catch (error) {
+                    alert('Erro ao carregar classes: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        },
+
+        saveFile() {
+            if (Object.keys(this.bosses).length === 0) {
+                alert('Nenhum dado para salvar!');
+                return;
+            }
+            const data = JSON.stringify(this.bosses, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ultra-bosses-edited.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        },
+
+        selectBoss(bossName) {
+            this.selectedBoss = bossName;
+            this.hiddenComps = [];
+        },
+
+        addNewBoss() {
+            const newBossName = prompt('Digite o nome do novo boss:');
+            if (!newBossName) return;
+            this.bosses[newBossName] = {
+                map: "",
+                party_size: 4,
+                tips: "",
+                doc_url: "",
+                wiki_url: "",
+                difficulty: "Extreme",
+                required_rank: "",
+                author: "",
+                comps: []
+            };
+            this.selectedBoss = newBossName;
+            this.hiddenComps = [];
+        },
+
+        deleteBoss(bossName) {
+            if (confirm(`Tem certeza que deseja remover o boss "${bossName}"?`)) {
+                delete this.bosses[bossName];
+                this.selectedBoss = Object.keys(this.bosses)[0] || null;
+            }
+        },
+
+        addNewComp(bossName) {
+            const compName = prompt('Digite o nome da nova composição:');
+            if (!compName) return;
+            this.bosses[bossName].comps.push({
+                name: compName,
+                classes: [],
+                strategy: "",
+                recommended_setup: {}
+            });
+        },
+
+        deleteComp(bossName, compIndex) {
+            if (confirm('Tem certeza que deseja remover esta composição?')) {
+                this.bosses[bossName].comps.splice(compIndex, 1);
+                const hiddenIndex = this.hiddenComps.indexOf(compIndex);
+                if (hiddenIndex !== -1) {
+                    this.hiddenComps.splice(hiddenIndex, 1);
+                }
+                this.hiddenComps = this.hiddenComps.map(i => i > compIndex ? i - 1 : i);
+            }
+        },
+
+        // Atualiza a lista de classes selecionadas e gera recommended_setup
+        updateClassesDropdown(comp, selectedOptions) {
+            const partySize = this.bosses[this.selectedBoss].party_size;
+            const selected = Array.from(selectedOptions).map(option => option.value);
+            comp.classes = selected.slice(0, partySize);
+
+            comp.recommended_setup = {};
+            for (const className of comp.classes) {
+                if (this.availableClasses[className]) {
+                    comp.recommended_setup[className] = {
+                        items: [],
+                        enhancements: {
+                            class: this.availableClasses[className].enh || "",
+                            weapon: this.availableClasses[className].awe_enh || "",
+                            helm: "",
+                            cape: ""
+                        }
+                    };
+                }
+            }
+        },
+
+        updateItems(setup, itemString) {
+            setup.items = itemString.split(',').map(i => i.trim()).filter(i => i);
+        },
+
+        addNewSetup(comp) {
+            const className = prompt('Digite o nome da classe para adicionar configuração:');
+            if (!className) return;
+            comp.recommended_setup[className] = {
+                items: [],
+                enhancements: {
+                    class: "",
+                    weapon: "",
+                    helm: "",
+                    cape: ""
+                }
+            };
+        },
+
+        deleteSetup(comp, className) {
+            if (confirm(`Remover a configuração para ${className}?`)) {
+                delete comp.recommended_setup[className];
+            }
+        },
+
+        toggleCompVisibility(index) {
+            const hiddenIndex = this.hiddenComps.indexOf(index);
+            if (hiddenIndex === -1) {
+                this.hiddenComps.push(index);
+            } else {
+                this.hiddenComps.splice(hiddenIndex, 1);
+            }
+        }
+    };
+}
+
+
+    </script>
+</body>
+</html>
